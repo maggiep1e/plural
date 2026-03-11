@@ -18,7 +18,8 @@ export default function Friends() {
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="bg-zinc-800 px-3 py-2 rounded"
+          className="bg-zinc-600 px-3 py-2 rounded"
+          placeholder="Search friends..."
         />
 
         <button

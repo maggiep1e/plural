@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { v4 as uuid } from "uuid";
+import { useThemeStore } from "./themeStore";
 
 export const useSystemStore = create((set, get) => ({
 
@@ -69,6 +70,12 @@ addMember: (name) =>
     if (state.currentFront) {
       state.endFront(now);
     }
+
+     const { setSystemColor } = useThemeStore.getState();
+
+  if (memberId.color) {
+    setSystemColor(memberId.color);
+  };
 
     set({ currentFront: memberId });
 

@@ -12,12 +12,12 @@ export default function MemberCard({ member, onFront }) {
 
     <>
       <div
-        className="bg-zinc-800 p-4 rounded-xl flex items-center gap-3 cursor-pointer"
+        className="bg-zinc-700 p-4 rounded-xl flex items-center gap-3 cursor-pointer"
         style={{ borderLeft: `6px solid ${member.color}` }}
         onClick={() => setEditing(true)}
       >
 
-        <div className={`bg-zinc-800 p-4 rounded-xl flex items-center gap-3
+        <div className={`bg-zinc-700 p-4 rounded-xl flex items-center gap-3
         ${currentFront === member.id ? "ring-2 ring-purple-500 shadow-lg shadow-purple-500/40" : ""}
         `}>
 

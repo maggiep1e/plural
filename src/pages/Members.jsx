@@ -44,7 +44,7 @@ export default function Members() {
 
         <select
           onChange={(e) => setTagFilter(e.target.value)}
-          className="bg-zinc-800 px-3 py-2 rounded"
+          className="bg-zinc-200 dark:bg-zinc-700 px-3 py-2 rounded"
         >
           <option value="">All tags</option>
 
@@ -68,12 +68,12 @@ export default function Members() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Member name"
-          className="bg-zinc-800 px-3 py-2 rounded"
+          className="bg-zinc-200  dark:bg-zinc-700 px-3 py-2 rounded"
         />
 
         <button
           onClick={submit}
-          className="bg-purple-600 px-4 py-2 rounded"
+          className="bg-purple-600   px-4 py-2 rounded"
         >
           Add
         </button>
