@@ -5,9 +5,12 @@ import Members from "./pages/Members";
 import Chat from "./pages/Chat";
 import Friends from "./pages/Friends";
 import Reminders from "./pages/Reminders";
+import Systems from "./pages/Systems";
+import Auth from "./pages/auth";
 
 import Sidebar from "./components/Sidebar";
 import TopBar from "./layout/TopBar";
+import { useIdStore } from "./store/idStore";
 
 export default function App() {
   return (
@@ -23,7 +26,9 @@ export default function App() {
               <Route path="/friends" element={<Friends />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/reminders" element={<Reminders />} />
-            </Routes>
+              <Route path="/systems" element={<Systems />} />
+              <Route path="/auth" element={<Auth />} />
+              </Routes>
           </div>
         </div>
       </div>

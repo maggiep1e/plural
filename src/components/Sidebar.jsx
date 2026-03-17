@@ -13,6 +13,7 @@ export default function Sidebar() {
       <Link to="/friends" className="bg-zinc-200 dark:bg-zinc-700 px-3 py-2 rounded">Friends</Link>
       <Link to="/chat" className="bg-zinc-200 dark:bg-zinc-700 px-3 py-2 rounded">Chat</Link>
       <Link to="/reminders" className="bg-zinc-200 dark:bg-zinc-700 px-3 py-2 rounded">Reminders</Link>
+      <Link to="/systems" className="bg-zinc-200 dark:bg-zinc-700 px-3 py-2 rounded">Systems</Link>
 
     </div>
   );

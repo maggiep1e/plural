@@ -1,104 +1,108 @@
 import { create } from "zustand";
-import { v4 as uuid } from "uuid";
 import { useThemeStore } from "./themeStore";
+import { createMember } from "../api/members";
 
 export const useSystemStore = create((set, get) => ({
 
   members: [],
+  folders: [],
 
   frontHistory: [],
-
   currentFront: null,
 
   status: "inactive",
 
-folders: [],
+  friends: [],
 
 
-addFolder: (name) =>
-  set((state) => ({
-    folders: [...state.folders, name]
-  })),
+  setMembers: (members) =>
+    set({ members }),
 
-addMember: (name) =>
-  set((state) => ({
-    members: [
-      ...state.members,
-      {
-        id: uuid(),
-        name,
-        displayName: name,
-        avatar: "",
-        color: "#a855f7",
-        tags: [],
-        folders: [],
-        archived: false
-      }
-    ]
-  })),
+
+  addMember: async (memberData) => {
+
+    const newMember = await createMember(memberData);
+
+    set((state) => ({
+      members: [...state.members, newMember]
+    }));
+
+  },
+
 
   updateMember: (id, updates) =>
-  set((state) => ({
-    members: state.members.map((m) =>
-      m.id === id ? { ...m, ...updates } : m
-    )
-  })),
+    set((state) => ({
+      members: state.members.map((m) =>
+        m._id === id ? { ...m, ...updates } : m
+      )
+    })),
+
+
 
   archiveMember: (id) =>
-  set((state) => ({
-    members: state.members.map((m) =>
-      m.id === id ? { ...m, archived: true } : m
-    )
-  })),
+    set((state) => ({
+      members: state.members.map((m) =>
+        m._id === id ? { ...m, archived: true } : m
+      )
+    })),
 
-  friends: [],
+
+
+  addFolder: (name) =>
+    set((state) => ({
+      folders: [...state.folders, name]
+    })),
+
+
 
   addFriend: (username) =>
     set((state) => ({
       friends: [
         ...state.friends,
-        { id: uuid(), username }
+        { username }
       ]
     })),
 
-  setFront: (memberId) => {
+
+
+  setFront: (member) => {
 
     const state = get();
-
     const now = Date.now();
 
     if (state.currentFront) {
       state.endFront(now);
     }
 
-     const { setSystemColor } = useThemeStore.getState();
+    const { setSystemColor } = useThemeStore.getState();
 
-  if (memberId.color) {
-    setSystemColor(memberId.color);
-  };
+    if (member.color) {
+      setSystemColor(member.color);
+    }
 
-    set({ currentFront: memberId });
+    set({ currentFront: member });
 
     set((state) => ({
       frontHistory: [
         ...state.frontHistory,
         {
-          id: uuid(),
-          memberId,
+          memberId: member._id,
           start: now,
           end: null
         }
       ]
     }));
+
   },
 
-  endFront: (time = Date.now()) => {
+
+
+  endFront: (time = Date.now()) =>
     set((state) => ({
       frontHistory: state.frontHistory.map((log) =>
         log.end === null ? { ...log, end: time } : log
       ),
       currentFront: null
-    }));
-  }
+    })),
 
-}))
+}));
