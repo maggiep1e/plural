@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
 import { useSystemStore } from "../store/systemStore";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import Auth from "./auth";
+import { useAuth } from "@clerk/clerk-react";
+
+
 
 import MemberCard from "../components/MemberCard";
 import SearchBar from "../components/SearchBar";
@@ -16,7 +21,11 @@ import {
   removeMemberFromFolder
 } from "../api/members"; // <- we need API functions for folders
 
+
+
 export default function Members() {
+  const { getToken } = useAuth();
+
   const members = useSystemStore((s) => s.members);
   const addMember = useSystemStore((s) => s.addMember);
   const setMembers = useSystemStore((s) => s.setMembers);
@@ -37,50 +46,79 @@ export default function Members() {
 
   // LOAD MEMBERS & FOLDERS
   useEffect(() => {
-    async function loadData() {
-      setMembers(await getMembers());
-      setFolders(await getFolders());
-    }
-    loadData();
-  }, []);
 
-  // ADD MEMBER
-  const submit = async () => {
-    if (!name) return;
-    const newMember = await createMember({ name, color: "#a855f7" });
-    addMember({
-      name,
-      displayName: name,
-      color: "#a855f7",
-      tags: []
-    });
-  };
+  async function loadMembers() {
 
+    const token = await getToken();
+
+    const data = await getMembers(token);
+
+    setMembers(data);
+
+  }
+
+  loadMembers();
+
+}, []);
+
+ useEffect(() => {
+
+  async function loadMembers() {
+
+    const token = await getToken();
+
+    const data = await getFolders(token);
+
+    getFolders(data);
+
+  }
+
+  loadMembers();
+
+}, []);
+
+const submit = async () => {
+
+  const token = await getToken();
+
+  const newMember = await createMember({
+    name,
+    displayName: name
+  }, token);
+
+  addMember(newMember);
+
+};
   // ADD FOLDER
   const handleAddFolder = async () => {
+    const token = await getToken();
+
     if (!newFolderName) return;
-    const folder = await createFolder({ name: newFolderName });
+    const folder = await createFolder({ name: newFolderName }, token);
     setFolders((prev) => [...prev, folder]);
     setNewFolderName("");
   };
 
   // DELETE FOLDER
   const handleDeleteFolder = async (folderId) => {
-    await deleteFolder(folderId);
+    const token = await getToken();
+    await deleteFolder(folderId, token);
     setFolders((prev) => prev.filter(f => f._id !== folderId));
   };
 
   // FOLDER MEMBERS
   const handleAddToFolder = async (folderName, memberId) => {
+    const token = await getToken();
     const folder = folders.find(f => f.name === folderName);
     if (!folder) return;
-    await addMemberToFolder(folder._id, memberId);
+    await addMemberToFolder(folder._id, memberId, token);
   };
 
   const handleRemoveFromFolder = async (folderName, memberId) => {
+    const token = await getToken();
     const folder = folders.find(f => f.name === folderName);
     if (!folder) return;
-    await removeMemberFromFolder(folder._id, memberId);
+    await removeMemberFromFolder(folder._id, memberId, token);
   };
 
   const filtered = filterMembers({
@@ -95,6 +133,8 @@ export default function Members() {
   const allFolderNames = folders.map(f => f.name);
 
   return (
+    <>
+    <SignedIn>
     <div className="flex flex-col gap-4">
 
       <SearchBar onSearch={setSearch} />
@@ -260,5 +300,10 @@ export default function Members() {
 
 )}
     </div>
+    </SignedIn>
+    <SignedOut>
+      <Auth />
+    </SignedOut>
+    </>
   );
 }
