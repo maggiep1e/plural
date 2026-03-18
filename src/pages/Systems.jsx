@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSessionStore } from "../store/sessionStore";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
-import Auth from "./auth";
-
 
 const API = "http://localhost:4000";
 
@@ -55,8 +52,7 @@ export default function Systems() {
 
 
   return (
-    <>
-    <SignedIn>
+
     <div className="flex flex-col gap-4">
 
       <h1 className="text-2xl font-bold">
@@ -87,11 +83,6 @@ export default function Systems() {
       ))}
 
     </div>
-    </SignedIn>
-    <SignedOut>
-      <Auth />
-    </SignedOut>
-    </>
 
   );
 }

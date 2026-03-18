@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { useSystemStore } from "../store/systemStore";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
-import Auth from "./auth";
-
 
 export default function Friends() {
 
@@ -12,8 +9,6 @@ export default function Friends() {
   const [name, setName] = useState("");
 
   return (
-    <>
-    <SignedIn>
     <div className="flex flex-col gap-4">
 
       <h1 className="text-2xl">Friends</h1>
@@ -43,11 +38,5 @@ export default function Friends() {
       ))}
 
     </div>
-    </SignedIn>
-
-    <SignedOut>
-      <Auth />
-    </SignedOut>
-    </>
   );
 }
