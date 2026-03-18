@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Card from "./Card";
 
 export default function FrontHistoryPanel(){
@@ -12,8 +13,9 @@ export default function FrontHistoryPanel(){
 
       <div className="flex gap-10">
 
-        <button>TRENDS</button>
-        <button>BY MEMBER</button>
+      <Link to="/analytics">
+        <button>VIEW</button>
+      </Link>
 
       </div>
 

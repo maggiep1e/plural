@@ -1,4 +1,6 @@
 import Card from "./Card";
+import ChatCard from "./ChatCard";
+import FriendsCard from "./FriendsCard";
 
 export default function NotificationPanel(){
 
@@ -13,13 +15,17 @@ export default function NotificationPanel(){
       <div className="flex gap-10">
 
         <div className="text-center">
-          💬
-          <p>CHAT</p>
+          <ChatCard>
+            💬
+            <p>CHAT</p>
+          </ChatCard>
         </div>
 
         <div className="text-center">
-          👤
-          <p>FRIENDS</p>
+          <FriendsCard>
+            👤
+            <p>FRIENDS</p>
+          </FriendsCard>
         </div>
 
       </div>

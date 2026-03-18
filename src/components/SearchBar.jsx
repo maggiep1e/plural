@@ -13,7 +13,7 @@ export default function SearchBar({ onSearch }) {
         setValue(v);
         onSearch(v);
       }}
-      placeholder="Search members..."
+      placeholder="Search..."
       className="bg-zinc-200 dark:bg-zinc-700 px-3 py-2 rounded w-full"
     />
 

@@ -2,7 +2,7 @@ import CurrentFront from "../components/CurrentFront";
 import NotificationPanel from "../components/NotificationPanel";
 import MembersPanel from "../components/MembersPanel";
 import FrontHistoryPanel from "../components/FrontHistoryPanel";
-import JournalsPanel from "../components/JournalsPanel";
+import JournalPanel from "../components/JournalPanel";
 
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import Auth from "./auth";
@@ -21,7 +21,7 @@ export default function Dashboard(){
       <MembersPanel />
 
       <FrontHistoryPanel />
-      <JournalsPanel />
+      <JournalPanel />
 
     </div>
     </SignedIn>

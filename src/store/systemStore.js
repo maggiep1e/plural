@@ -14,14 +14,13 @@ export const useSystemStore = create((set, get) => ({
 
   friends: [],
 
-
   setMembers: (members) =>
     set({ members }),
 
 
-  addMember: async (memberData) => {
+  addMember: async (memberData, token) => {
 
-    const newMember = await createMember(memberData);
+    const newMember = await createMember(memberData, token);
 
     set((state) => ({
       members: [...state.members, newMember]
@@ -57,10 +56,7 @@ export const useSystemStore = create((set, get) => ({
 
   addFriend: (username) =>
     set((state) => ({
-      friends: [
-        ...state.friends,
-        { username }
-      ]
+      friends: [...state.friends, { username }]
     })),
 
 

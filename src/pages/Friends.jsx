@@ -1,53 +1,61 @@
-import { useState } from "react";
-import { useSystemStore } from "../store/systemStore";
+import { useEffect } from "react";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { useFriendsStore } from "../store/friendStore";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import Auth from "./auth";
-
+import SearchBar from "../components/SearchBar";
 
 export default function Friends() {
 
-  const friends = useSystemStore((s) => s.friends);
-  const addFriend = useSystemStore((s) => s.addFriend);
+  const { user } = useUser();
+  const { getToken } = useAuth();
 
-  const [name, setName] = useState("");
+  const friends = useFriendsStore((s) => s.friends);
+  const loadFriends = useFriendsStore((s) => s.loadFriends);
+
+  useEffect(() => {
+
+    async function load() {
+
+      const token = await getToken();
+
+      await loadFriends(user.id, token);
+
+    }
+
+    if (user) load();
+
+  }, [user]);
 
   return (
     <>
     <SignedIn>
-    <div className="flex flex-col gap-4">
+    <div className="space-y-6">
 
-      <h1 className="text-2xl">Friends</h1>
-
-      <div className="flex gap-2">
-
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="bg-zinc-600 px-3 py-2 rounded"
-          placeholder="Search friends..."
-        />
-
-        <button
-          onClick={() => addFriend(name)}
-          className="bg-purple-600 px-4 py-2 rounded"
-        >
-          Add
-        </button>
-
-      </div>
-
+      <h1 className="text-2xl font-bold">
+        Friends
+      </h1>
+      <SearchBar />
       {friends.map((f) => (
-        <div key={f.id} className="bg-zinc-800 p-3 rounded">
-          {f.username}
+
+        <div
+          key={f._id}
+          className="border p-3 rounded"
+        >
+          {f.requesterId === user.id
+            ? f.receiverId
+            : f.requesterId}
         </div>
+
       ))}
 
     </div>
     </SignedIn>
-
     <SignedOut>
       <Auth />
     </SignedOut>
     </>
+
   );
+
 }

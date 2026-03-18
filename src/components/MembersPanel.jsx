@@ -1,25 +1,34 @@
 import Card from "./Card";
+import { Link } from "react-router-dom";
 
 export default function MembersPanel(){
 
   return(
-<Card>
-    <div className="border-4 border-black rounded-3xl p-6">
+    <Card>
+      <div className="border-4 border-black rounded-3xl p-6">
 
-      <h2 className="font-bold mb-4">
-        MEMBERS
-      </h2>
+        <h2 className="font-bold mb-4">
+          MEMBERS
+        </h2>
 
-      <div className="flex gap-10">
+        <div className="flex gap-10">
 
-        <button >LIST</button>
-        <button>FOLDERS</button>
-        <button>ADD NEW</button>
+          <Link to="/members">
+            <button>LIST</button>
+          </Link>
+
+          <Link to="/members">
+            <button>FOLDERS</button>
+          </Link>
+
+          <Link to="/members">
+            <button>ADD NEW</button>
+          </Link>
+
+        </div>
 
       </div>
-
-    </div>
-</Card>
+    </Card>
   );
 
 }

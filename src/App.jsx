@@ -10,6 +10,9 @@ import Friends from "./pages/Friends";
 import Reminders from "./pages/Reminders";
 import Systems from "./pages/Systems";
 import Auth from "./pages/auth";
+import Analytics from "./pages/Analytics";
+import SystemJournal from "./pages/SystemJournal";
+import MemberJournal from "./pages/MemberJournal";
 
 import Sidebar from "./components/Sidebar";
 import TopBar from "./layout/TopBar";
@@ -48,6 +51,9 @@ function AppRoutes() {
               <Route path="/reminders" element={<Reminders />} />
               <Route path="/systems" element={<Systems />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/system-journal" element={<SystemJournal />} />
+              <Route path="/member-journal" element={<MemberJournal />} />
             </Routes>
           </div>
         </div>
