@@ -1,4 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ClerkProvider, useUser } from "@clerk/clerk-react";
+import { useEffect } from "react";
+import { useIdStore } from "./store/idStore";
 
 import Dashboard from "./pages/Dashboard";
 import Members from "./pages/Members";
@@ -10,9 +13,26 @@ import Auth from "./pages/auth";
 
 import Sidebar from "./components/Sidebar";
 import TopBar from "./layout/TopBar";
-import { useIdStore } from "./store/idStore";
 
-export default function App() {
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+
+// This component can use Clerk hooks
+function AppRoutes() {
+
+  const { user, isLoaded } = useUser();
+  const setUserId = useIdStore((s) => s.setUserId);
+
+  useEffect(() => {
+
+    if (!isLoaded) return;
+
+    if (user) {
+      setUserId(user.id);
+    }
+
+  }, [user, isLoaded, setUserId]);
+
   return (
     <BrowserRouter>
       <div className="flex h-screen bg-white dark:bg-zinc-800 text-black dark:text-white">
@@ -28,10 +48,19 @@ export default function App() {
               <Route path="/reminders" element={<Reminders />} />
               <Route path="/systems" element={<Systems />} />
               <Route path="/auth" element={<Auth />} />
-              </Routes>
+            </Routes>
           </div>
         </div>
       </div>
     </BrowserRouter>
+  );
+}
+
+
+export default function App() {
+  return (
+    <ClerkProvider publishableKey={clerkPubKey}>
+      <AppRoutes />
+    </ClerkProvider>
   );
 }

@@ -1,8 +1,10 @@
 import Card from "./Card";
+import { useSystemStore } from "../store/systemStore";
 
 export default function CurrentFront(){
 
-  const members = ["A","B","C","D","E"];
+  const currentFront = useSystemStore((s) => s.currentFront);
+
 
   return(
 <Card>
@@ -14,7 +16,7 @@ export default function CurrentFront(){
 
       <div className="flex gap-6 items-center">
 
-        {members.map((m)=>(
+        {currentFront.map((m)=>(
           <div key={m} className="flex flex-col items-center">
 
             <div className="w-16 h-16 rounded-full border-4 border-black flex items-center justify-center text-2xl">
