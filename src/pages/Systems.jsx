@@ -1,97 +1,69 @@
 import { useEffect, useState } from "react";
-import { useSessionStore } from "../store/sessionStore";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
-import Auth from "./auth";
-
-
-const API = "http://localhost:4000";
+import { getSystems, createSystem } from "../api/systems";
+import { useSystemStore } from "../store/systemStore";
 
 export default function Systems() {
-
-  const userId = useSessionStore((s) => s.userId);
-  const setSystem = useSessionStore((s) => s.setSystem);
 
   const [systems, setSystems] = useState([]);
   const [name, setName] = useState("");
 
+  const setSystemId = useSystemStore((s) => s.setSystemId);
+
   useEffect(() => {
+    load();
+  }, []);
 
-    async function load() {
+  async function load() {
+    const data = await getSystems();
+    setSystems(data);
+  }
 
-      const res = await fetch(`${API}/systems/${userId}`);
-      const data = await res.json();
+  async function create() {
 
-      setSystems(data);
+    const system = await createSystem(name);
 
-    }
+    setSystems(prev => [...prev, system]);
 
-    if (userId) load();
+    setName("");
 
-  }, [userId]);
-
-
-
-  const createSystem = async () => {
-
-    const res = await fetch(`${API}/systems`, {
-
-      method: "POST",
-
-      headers: { "Content-Type": "application/json" },
-
-      body: JSON.stringify({
-        userId,
-        name
-      })
-
-    });
-
-    const system = await res.json();
-
-    setSystems((prev) => [...prev, system]);
-
-  };
-
-
+  }
 
   return (
-    <>
-    <SignedIn>
-    <div className="flex flex-col gap-4">
+
+    <div className="space-y-4">
 
       <h1 className="text-2xl font-bold">
-        Your Systems
+        Systems
       </h1>
 
-      <input
-        placeholder="System name"
-        onChange={(e) => setName(e.target.value)}
-      />
+      <div className="flex gap-2">
 
-      <button onClick={createSystem}>
-        Create System
-      </button>
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="System name"
+          className="border p-2"
+        />
 
-      {systems.map((sys) => (
+        <button onClick={create} className="border px-4">
+          Create
+        </button>
+
+      </div>
+
+      {systems.map(s => (
 
         <div
-          key={sys._id}
-          className="p-3 border rounded cursor-pointer"
-          onClick={() => setSystem(sys._id)}
+          key={s.id}
+          onClick={() => setSystemId(s.id)}
+          className="border p-3 cursor-pointer"
         >
-
-          {sys.name}
-
+          {s.name}
         </div>
 
       ))}
 
     </div>
-    </SignedIn>
-    <SignedOut>
-      <Auth />
-    </SignedOut>
-    </>
 
   );
 }

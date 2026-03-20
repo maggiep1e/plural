@@ -3,7 +3,6 @@ import { useAuth } from "@clerk/clerk-react";
 import { useIdStore } from "../store/idStore";
 import { getFrontAnalytics } from "../api/analytics";
 import Auth from "./auth";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 export default function Analytics() {
 
@@ -30,7 +29,7 @@ export default function Analytics() {
 
   return (
     <>
-    <SignedIn>
+
     <div className="space-y-6">
 
       <h1 className="text-2xl font-bold">
@@ -58,10 +57,6 @@ export default function Analytics() {
       </div>
 
     </div>
-    </SignedIn>
-    <SignedOut>
-      <Auth />
-    </SignedOut>
     </>
   );
 }

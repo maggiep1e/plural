@@ -6,9 +6,6 @@ export const useSessionStore = create((set) => ({
   systemId: null,
 
   setUser: (id) => set({ userId: id }),
-
   setSystem: (id) => set({ systemId: id }),
-
-   logout: () => set({ user: null }),
 
 }));

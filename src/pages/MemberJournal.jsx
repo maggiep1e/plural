@@ -3,7 +3,6 @@ import { useAuth } from "@clerk/clerk-react";
 import { useSystemStore } from "../store/systemStore";
 import { createMemberJournal, searchMemberJournal } from "../api/journals";
 
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import Auth from "./auth";
 import SearchBar from "../components/SearchBar";
 
@@ -54,7 +53,7 @@ export default function MemberJournal() {
 
   return (
 <>
-    <SignedIn>
+
     <div className="space-y-6">
 
       <h1 className="text-2xl font-bold">
@@ -170,10 +169,7 @@ export default function MemberJournal() {
       </div>
 
     </div>
-    </SignedIn>
-    <SignedOut>
-      <Auth />
-    </SignedOut>
+
     </>
 
   );

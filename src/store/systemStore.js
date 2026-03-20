@@ -1,104 +1,54 @@
 import { create } from "zustand";
-import { useThemeStore } from "./themeStore";
-import { createMember } from "../api/members";
+import {
+  getMembers,
+  createMember,
+  updateMember
+} from "../api/members";
 
 export const useSystemStore = create((set, get) => ({
 
+  systemId: null,
+
   members: [],
-  folders: [],
 
-  frontHistory: [],
-  currentFront: null,
+  setSystemId: (id) => set({ systemId: id }),
 
-  status: "inactive",
+  loadMembers: async () => {
 
-  friends: [],
+    const systemId = get().systemId;
+    if (!systemId) return;
 
-  setMembers: (members) =>
-    set({ members }),
+    const data = await getMembers(systemId);
 
+    set({ members: data });
 
-  addMember: async (memberData, token) => {
+  },
 
-    const newMember = await createMember(memberData, token);
+  addMember: async (memberData) => {
+
+    const systemId = get().systemId;
+
+    const newMember = await createMember({
+      ...memberData,
+      system_id: systemId
+    });
 
     set((state) => ({
-      members: [...state.members, newMember]
+      members: [newMember, ...state.members]
     }));
 
   },
 
+  updateMember: async (id, updates) => {
 
-  updateMember: (id, updates) =>
+    const updated = await updateMember(id, updates);
+
     set((state) => ({
-      members: state.members.map((m) =>
-        m._id === id ? { ...m, ...updates } : m
+      members: state.members.map(m =>
+        m.id === id ? updated : m
       )
-    })),
-
-
-
-  archiveMember: (id) =>
-    set((state) => ({
-      members: state.members.map((m) =>
-        m._id === id ? { ...m, archived: true } : m
-      )
-    })),
-
-
-
-  addFolder: (name) =>
-    set((state) => ({
-      folders: [...state.folders, name]
-    })),
-
-
-
-  addFriend: (username) =>
-    set((state) => ({
-      friends: [...state.friends, { username }]
-    })),
-
-
-
-  setFront: (member) => {
-
-    const state = get();
-    const now = Date.now();
-
-    if (state.currentFront) {
-      state.endFront(now);
-    }
-
-    const { setSystemColor } = useThemeStore.getState();
-
-    if (member.color) {
-      setSystemColor(member.color);
-    }
-
-    set({ currentFront: member });
-
-    set((state) => ({
-      frontHistory: [
-        ...state.frontHistory,
-        {
-          memberId: member._id,
-          start: now,
-          end: null
-        }
-      ]
     }));
 
-  },
-
-
-
-  endFront: (time = Date.now()) =>
-    set((state) => ({
-      frontHistory: state.frontHistory.map((log) =>
-        log.end === null ? { ...log, end: time } : log
-      ),
-      currentFront: null
-    })),
+  }
 
 }));

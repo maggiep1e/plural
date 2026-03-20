@@ -4,7 +4,6 @@ import MemberProfile from "../components/MemberProfile";
 
 import MemberEditor from "../components/MemberEditor";
 
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import Auth from "./auth";
 import SearchBar from "../components/SearchBar";
 
@@ -15,9 +14,18 @@ export default function Members() {
   const [selected, setSelected] = useState(null);
   const [mode, setMode] = useState("view");
 
+  const loadMembers = useSystemStore(s => s.loadMembers);
+const systemId = useSessionStore(s => s.systemId);
+
+useEffect(() => {
+  if (systemId) {
+    loadMembers();
+  }
+}, [systemId]);
+
   return (
 <>
-    <SignedIn>
+
       <SearchBar />
     <div className="flex gap-6">
 
@@ -63,10 +71,7 @@ export default function Members() {
       </div>
 
     </div>
-    </SignedIn>
-    <SignedOut>
-      <Auth />
-    </SignedOut>
+
     </>
   );
 }

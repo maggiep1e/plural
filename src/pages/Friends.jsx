@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useFriendsStore } from "../store/friendStore";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import Auth from "./auth";
 import SearchBar from "../components/SearchBar";
 
@@ -29,7 +28,6 @@ export default function Friends() {
 
   return (
     <>
-    <SignedIn>
     <div className="space-y-6">
 
       <h1 className="text-2xl font-bold">
@@ -50,10 +48,6 @@ export default function Friends() {
       ))}
 
     </div>
-    </SignedIn>
-    <SignedOut>
-      <Auth />
-    </SignedOut>
     </>
 
   );

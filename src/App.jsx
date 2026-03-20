@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ClerkProvider, useUser } from "@clerk/clerk-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useIdStore } from "./store/idStore";
 
 import Dashboard from "./pages/Dashboard";
@@ -14,10 +13,41 @@ import Analytics from "./pages/Analytics";
 import SystemJournal from "./pages/SystemJournal";
 import MemberJournal from "./pages/MemberJournal";
 
-import Sidebar from "./components/Sidebar";
-import TopBar from "./layout/TopBar";
+import { getUser } from "./lib/auth";
 
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+export default function AppWrapper() {
+
+  const [user, setUser] = useState(null);
+  const setUserId = useIdStore.getState().setUserId;
+
+  useEffect(() => {
+
+    async function load() {
+      const u = await getUser();
+      setUser(u);
+
+            if (u) {
+        setUserId(u.id);
+      }
+    }
+
+    load();
+
+  }, []);
+
+  if (user === null) return <div>Loading...</div>;
+
+  if (!user) return  <Auth />;
+
+  const initSession = useSessionStore(s => s.initSession);
+
+  useEffect(() => {
+    initSession();
+  }, []);
+
+  return <App />;
+
+}
 
 
 // This component can use Clerk hooks
@@ -38,11 +68,6 @@ function AppRoutes() {
 
   return (
     <BrowserRouter>
-      <div className="flex h-screen bg-white dark:bg-zinc-800 text-black dark:text-white">
-        <Sidebar />
-        <div className="flex-1 flex flex-col overflow-auto">
-          <TopBar />
-          <div className="flex-1 p-6">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/members" element={<Members />} />
@@ -55,18 +80,19 @@ function AppRoutes() {
               <Route path="/system-journal" element={<SystemJournal />} />
               <Route path="/member-journal" element={<MemberJournal />} />
             </Routes>
-          </div>
-        </div>
-      </div>
     </BrowserRouter>
   );
 }
 
 
-export default function App() {
+export function App() {
   return (
-    <ClerkProvider publishableKey={clerkPubKey}>
+    <div className="
+  flex h-screen w-screen max-w-sm sm:max-w-md md:max-w-lg
+  bg-white dark:bg-zinc-900
+  text-black dark:text-white
+">
       <AppRoutes />
-    </ClerkProvider>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useReminderStore } from "../features/reminders/reminderStore";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+
 import Auth from "./auth";
 
 
@@ -18,7 +18,7 @@ export default function Reminders() {
 
   return (
     <>
-    <SignedIn>
+
     <div className="flex flex-col gap-4">
 
       <h1 className="text-2xl">Reminders</h1>
@@ -46,10 +46,6 @@ export default function Reminders() {
       ))}
 
     </div>
-    </SignedIn> 
-    <SignedOut>
-      <Auth />
-    </SignedOut>
     </>
   );
 }

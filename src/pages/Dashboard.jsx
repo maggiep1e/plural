@@ -4,14 +4,11 @@ import MembersPanel from "../components/MembersPanel";
 import FrontHistoryPanel from "../components/FrontHistoryPanel";
 import JournalPanel from "../components/JournalPanel";
 
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
-import Auth from "./auth";
-
 export default function Dashboard(){
 
   return(
     <>
-    <SignedIn>
+
     <div className="grid grid-cols-2 gap-6">
       <div className="col-span-2">
         <CurrentFront />
@@ -24,11 +21,6 @@ export default function Dashboard(){
       <JournalPanel />
 
     </div>
-    </SignedIn>
-
-    <SignedOut>
-      <Auth />
-    </SignedOut>
     </>
   );
 
